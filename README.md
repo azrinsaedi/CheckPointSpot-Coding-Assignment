@@ -1,4 +1,4 @@
-# 🚀 Task Manager (v1.2.0)
+# 🚀 Task Manager (v1.2.1)
 
 A simple and responsive **Task Manager** built with **React**, **TypeScript**, and **Material-UI (MUI)**.
 
@@ -6,10 +6,9 @@ A simple and responsive **Task Manager** built with **React**, **TypeScript**, a
 
 ---
 
-## 📌 Features (v1.2.0)
+## 📌 Features (v1.2.1)
 
-✅ Add **Parent ID** in the **Task List**
-✅ Minor **UI** Improvement
+✅ Add **Circular Dependency Check** in the **Task List**
 
 ---
 

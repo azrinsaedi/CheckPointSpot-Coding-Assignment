@@ -4,7 +4,7 @@ export enum TaskStatus {
   COMPLETED = 'COMPLETED',
 }
 
-export type Task = {
+export type TaskType = {
   id: string;
   name: string;
   description: string;
@@ -13,25 +13,25 @@ export type Task = {
 };
 
 export type TaskListProps = {
-  tasks: Task[];
+  tasks: TaskType[];
   handleToggle: (id: string) => void;
 };
 
 export type TaskProps = {
-  tasks: Task[];
+  tasks: TaskType[];
   newTaskName: string;
   newTaskDescription: string;
   setNewTaskName: (name: string) => void;
   setNewTaskDescription: (description: string) => void;
-  handleAddTask: () => void;
+  handleAddTask: (newTaskName: string, newTaskDescription: string, parentTaskId: string) => TaskType | null;
   handleToggle: (id: string) => void;
 };
 
 export interface TaskContextProps {
-  tasks: Task[];
-  filteredTasks: Task[];
+  tasks: TaskType[];
+  filteredTasks: TaskType[];
   filter: string;
   setFilter: (filter: string) => void;
   handleToggle: (id: string) => void;
-  setTasks: (tasks: Task[]) => void;
+  setTasks: (tasks: TaskType[]) => void;
 }

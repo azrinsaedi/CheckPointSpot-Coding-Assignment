@@ -14,9 +14,10 @@ import {
 } from '@mui/material';
 import TaskList from './TaskList';
 import { useTaskContext } from '../context/useTaskContext';
+import { TaskType } from '../types';
 
 const Task: React.FC<{
-  handleAddTask: (newTaskName: string, newTaskDescription?: string, parentTaskId?: string) => void;
+  handleAddTask: (newTaskName: string, newTaskDescription?: string, parentTaskId?: string) => TaskType | null;
   handleToggle: (id: string) => void;
 }> = ({ handleAddTask, handleToggle }) => {
   const {
@@ -24,6 +25,7 @@ const Task: React.FC<{
     filter,
     setFilter,
     tasks,
+    setTasks,
     newTaskName,
     setNewTaskName,
     newTaskDescription,
@@ -41,7 +43,11 @@ const Task: React.FC<{
       return;
     }
 
-    handleAddTask(newTaskName, newTaskDescription?.trim() || '', parentTaskId.trim() || '');
+    const newTask = handleAddTask(newTaskName, newTaskDescription?.trim() || '', parentTaskId.trim() || '');
+
+    if (!newTask) return;
+
+    setTasks((prevTasks) => [...prevTasks, newTask]);
 
     setNewTaskName('');
     setNewTaskDescription('');

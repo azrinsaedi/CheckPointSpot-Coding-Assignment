@@ -5,10 +5,11 @@ import Task from './components/Task';
 import Footer from './components/Footer';
 import { nanoid } from 'nanoid';
 import { useTaskContext } from './context/useTaskContext';
-import { TaskStatus } from './types';
+import { TaskType, TaskStatus } from './types';
+import { hasCircularDependency } from './utils/checkCircularDependency';
 
 const App: React.FC = () => {
-  const { setTasks } = useTaskContext();
+  const { tasks, setTasks } = useTaskContext();
 
   const [darkMode, setDarkMode] = React.useState<boolean>(() => {
     return JSON.parse(localStorage.getItem('darkMode') || 'false');
@@ -39,8 +40,8 @@ const App: React.FC = () => {
   };
 
   const handleAddTask = useCallback(
-    (newTaskName: string, newTaskDescription: string = '', parentTaskId: string = '') => {
-      if (newTaskName.trim() === '') return;
+    (newTaskName: string, newTaskDescription: string = '', parentTaskId: string = ''): TaskType | null => {
+      if (newTaskName.trim() === '') return null;
 
       const newTaskObj = {
         id: nanoid(8),
@@ -50,9 +51,14 @@ const App: React.FC = () => {
         parentId: parentTaskId || '',
       };
 
-      setTasks((prevTasks) => [...prevTasks, newTaskObj]);
+      if (hasCircularDependency(newTaskObj.id, parentTaskId, tasks)) {
+        alert('Cannot create task due to circular dependency!');
+        return null;
+      }
+
+      return newTaskObj;
     },
-    [setTasks]
+    [tasks]
   );
 
   const theme = useMemo(
