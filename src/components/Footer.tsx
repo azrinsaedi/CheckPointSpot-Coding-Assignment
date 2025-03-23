@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { FooterProps } from '../types';
+import { useTaskContext } from '../context/useTaskContext';
 
-const Footer: React.FC<FooterProps> = ({ taskCount }) => {
+const Footer: React.FC = () => {
+  const { filteredTasks } = useTaskContext();
   return (
     <Box textAlign='center' p={2} mt={4} component='footer'>
       <Typography variant='body1' color='textSecondary'>
-        {taskCount} {taskCount === 1 ? 'task' : 'tasks'} total
+        {filteredTasks.length} {filteredTasks.length === 1 ? 'task' : 'tasks'} total
       </Typography>
     </Box>
   );

@@ -1,8 +1,14 @@
+export enum TaskStatus {
+  IN_PROGRESS = 'IN PROGRESS',
+  DONE = 'DONE',
+  COMPLETED = 'COMPLETED',
+}
+
 export type Task = {
   id: string;
   name: string;
   description: string;
-  status: 'DONE' | 'IN PROGRESS';
+  status: TaskStatus;
 };
 
 export type TaskListProps = {
@@ -20,6 +26,11 @@ export type TaskProps = {
   handleToggle: (id: string) => void;
 };
 
-export type FooterProps = {
-  taskCount: number;
-};
+export interface TaskContextProps {
+  tasks: Task[];
+  filteredTasks: Task[];
+  filter: string;
+  setFilter: (filter: string) => void;
+  handleToggle: (id: string) => void;
+  setTasks: (tasks: Task[]) => void;
+}
