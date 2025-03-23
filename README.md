@@ -1,4 +1,4 @@
-# 🚀 Task Manager (v1.3.0)
+# 🚀 Task Manager (v1.3.1)
 
 A simple and responsive **Task Manager** built with **React**, **TypeScript**, and **Material-UI (MUI)**.
 
@@ -6,13 +6,17 @@ A simple and responsive **Task Manager** built with **React**, **TypeScript**, a
 
 ---
 
-## 📌 Features (v1.3.0)
+## 📌 Features (v1.3.1)
 
-✅ Add **No of Dependency**, **No of DONE Dependency** and **No of COMPLETE Dependency**
+✅ Tick a **Task** also will update **Parent Task**
 
 ---
 
 ## 📜 Version History
+
+### 🔹 v1.3.0
+
+- Add **No of Dependency**, **No of DONE Dependency** and **No of COMPLETE Dependency**
 
 ### 🔹 v1.2.1
 

@@ -18,16 +18,77 @@ const App: React.FC = () => {
   const handleToggle = useCallback(
     (id: string) => {
       setTasks((prevTasks) => {
-        const updatedTasks = prevTasks.map((task) =>
-          task.id === id
-            ? {
-                ...task,
-                status: task.status === TaskStatus.DONE ? TaskStatus.IN_PROGRESS : TaskStatus.DONE,
-              }
-            : task
-        );
+        let updatedTasks = prevTasks.map((task) => {
+          if (task.id === id && task.status === 'IN PROGRESS' && task.noOfDependencies === 0) {
+            return {
+              ...task,
+              status: TaskStatus.COMPLETE,
+            };
+          }
 
-        const updatedTasksWithDependencies = updatedTasks.map((task) => {
+          if (task.id === id && task.status === 'COMPLETE' && task.noOfDependencies === 0) {
+            return {
+              ...task,
+              status: TaskStatus.IN_PROGRESS,
+            };
+          }
+
+          if (task.id === id && task.status === 'IN PROGRESS' && task.noOfDependencies > 0) {
+            let dependentTasks = prevTasks.filter((t) => t.parentId === task.id && t.status === TaskStatus.COMPLETE);
+            if (dependentTasks.length === task.noOfDependencies) {
+              return {
+                ...task,
+                status: TaskStatus.COMPLETE,
+              };
+            }
+
+            dependentTasks = prevTasks.filter((t) => t.parentId === task.id && t.status === TaskStatus.IN_PROGRESS);
+            return {
+              ...task,
+              status: TaskStatus.IN_PROGRESS,
+            };
+          }
+
+          if (task.id === id && task.status === 'COMPLETE' && task.noOfDependencies > 0) {
+            const dependentTasks = prevTasks.filter(
+              (t) => t.parentId === task.id && t.status === TaskStatus.IN_PROGRESS
+            );
+
+            if (dependentTasks.length > 0) {
+              return {
+                ...task,
+                status: TaskStatus.DONE,
+              };
+            }
+
+            return {
+              ...task,
+              status: TaskStatus.COMPLETE,
+            };
+          }
+
+          if (task.id === id && task.status === 'DONE' && task.noOfDependencies > 0) {
+            const dependentTasks = prevTasks.filter(
+              (t) => t.parentId === task.id && t.status === TaskStatus.IN_PROGRESS
+            );
+
+            if (dependentTasks.length > 0) {
+              return {
+                ...task,
+                status: TaskStatus.IN_PROGRESS,
+              };
+            }
+
+            return {
+              ...task,
+              status: TaskStatus.COMPLETE,
+            };
+          }
+
+          return task;
+        });
+
+        updatedTasks = updatedTasks.map((task) => {
           const noOfDependencies = updatedTasks.filter((t) => t.parentId === task.id).length;
           const noOfDoneDependencies = updatedTasks.filter(
             (t) => t.parentId === task.id && t.status === TaskStatus.DONE
@@ -44,7 +105,24 @@ const App: React.FC = () => {
           };
         });
 
-        return updatedTasksWithDependencies;
+        updatedTasks = updatedTasks.map((e) => {
+          if (e.noOfDependencies === e.noOfCompleteDependencies && e.noOfDependencies !== 0) {
+            return {
+              ...e,
+              status: TaskStatus.COMPLETE,
+            };
+          }
+
+          if (e.noOfDependencies !== e.noOfCompleteDependencies && e.noOfDependencies !== 0) {
+            return {
+              ...e,
+              status: TaskStatus.DONE,
+            };
+          }
+          return e;
+        });
+
+        return updatedTasks;
       });
     },
     [setTasks]

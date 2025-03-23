@@ -33,7 +33,10 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, handleToggle }) => {
                 alignItems: 'center',
               }}
             >
-              <Checkbox checked={task.status === 'DONE'} onChange={() => handleToggle(task.id)} />
+              <Checkbox
+                checked={task.status === 'DONE' || task.status === 'COMPLETE'}
+                onChange={() => handleToggle(task.id)}
+              />
             </ListItemIcon>
             <ListItemText primary={task.id} sx={{ textAlign: 'center' }} />
             <ListItemText primary={task.name} sx={{ textAlign: 'center' }} />
