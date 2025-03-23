@@ -1,20 +1,9 @@
 import React from 'react';
-import {
-  Container,
-  Box,
-  TextField,
-  Button,
-  Paper,
-  Typography,
-  Divider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Container, Box, Paper, Typography, Divider, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import TaskList from './TaskList';
 import { useTaskContext } from '../context/useTaskContext';
 import { TaskType } from '../types';
+import AddTask from './AddTask';
 
 const Task: React.FC<{
   handleAddTask: (newTaskName: string, newTaskDescription?: string, parentTaskId?: string) => TaskType | null;
@@ -47,7 +36,25 @@ const Task: React.FC<{
 
     if (!newTask) return;
 
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setTasks((prevTasks) => {
+      const updatedTasks = [...prevTasks, newTask];
+
+      const updatedTasksWithDependencies = updatedTasks.map((task) => {
+        const noOfDependencies = updatedTasks.filter((t) => t.parentId === task.id).length;
+        const noOfDoneDependencies = updatedTasks.filter((t) => t.parentId === task.id && t.status === 'DONE').length;
+        const noOfCompleteDependencies = updatedTasks.filter(
+          (t) => t.parentId === task.id && t.status === 'COMPLETE'
+        ).length;
+        return {
+          ...task,
+          noOfDependencies,
+          noOfDoneDependencies,
+          noOfCompleteDependencies,
+        };
+      });
+
+      return updatedTasksWithDependencies;
+    });
 
     setNewTaskName('');
     setNewTaskDescription('');
@@ -56,51 +63,19 @@ const Task: React.FC<{
   };
 
   return (
-    <Container maxWidth='md' sx={{ mt: 4 }}>
+    <Container maxWidth='lg' sx={{ mt: 4 }}>
       <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant='h5' fontWeight='bold' align='center' gutterBottom>
-          Add New Task
-        </Typography>
-
-        <Box component='form' onSubmit={handleSubmit} display='flex' flexDirection='column' gap={2} mb={2}>
-          <TextField
-            label='Task Name'
-            variant='outlined'
-            fullWidth
-            required
-            value={newTaskName}
-            onChange={(e) => {
-              setNewTaskName(e.target.value);
-              setError(false);
-            }}
-            error={error}
-            helperText={error ? 'Task name is required' : ''}
-          />
-          <TextField
-            label='Task Description'
-            variant='outlined'
-            fullWidth
-            multiline
-            rows={2}
-            value={newTaskDescription || ''}
-            onChange={(e) => setNewTaskDescription(e.target.value)}
-          />
-          <TextField
-            label='Parent Task ID'
-            variant='outlined'
-            fullWidth
-            value={parentTaskId}
-            onChange={(e) => setParentTaskId(e.target.value)}
-          />
-          <Typography display='flex' justifyContent='flex-end'>
-            * is required
-          </Typography>
-          <Box display='flex' justifyContent='center'>
-            <Button type='submit' variant='contained' color='primary' sx={{ width: '150px' }}>
-              Add Task
-            </Button>
-          </Box>
-        </Box>
+        <AddTask
+          newTaskName={newTaskName}
+          setNewTaskName={setNewTaskName}
+          newTaskDescription={newTaskDescription}
+          setNewTaskDescription={setNewTaskDescription}
+          parentTaskId={parentTaskId}
+          setParentTaskId={setParentTaskId}
+          handleSubmit={handleSubmit}
+          error={error}
+          setError={setError}
+        />
 
         <Divider sx={{ mb: 3 }} />
 
@@ -114,7 +89,7 @@ const Task: React.FC<{
               <MenuItem value='ALL'>All</MenuItem>
               <MenuItem value='IN PROGRESS'>In Progress</MenuItem>
               <MenuItem value='DONE'>Done</MenuItem>
-              <MenuItem value='COMPLETED'>Completed</MenuItem>
+              <MenuItem value='COMPLETE'>Complete</MenuItem>
             </Select>
           </FormControl>
         </Box>

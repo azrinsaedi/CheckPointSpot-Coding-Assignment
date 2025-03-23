@@ -1,7 +1,7 @@
 export enum TaskStatus {
   IN_PROGRESS = 'IN PROGRESS',
   DONE = 'DONE',
-  COMPLETED = 'COMPLETED',
+  COMPLETE = 'COMPLETE',
 }
 
 export type TaskType = {
@@ -10,6 +10,9 @@ export type TaskType = {
   description: string;
   status: TaskStatus;
   parentId: string;
+  noOfDependencies: number;
+  noOfDoneDependencies: number;
+  noOfCompleteDependencies: number;
 };
 
 export type TaskListProps = {
@@ -34,4 +37,16 @@ export interface TaskContextProps {
   setFilter: (filter: string) => void;
   handleToggle: (id: string) => void;
   setTasks: (tasks: TaskType[]) => void;
+}
+
+export interface AddTaskProps {
+  newTaskName: string;
+  setNewTaskName: (name: string) => void;
+  newTaskDescription: string;
+  setNewTaskDescription: (description: string) => void;
+  parentTaskId: string;
+  setParentTaskId: (parentId: string) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+  error: boolean;
+  setError: (error: boolean) => void;
 }

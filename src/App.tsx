@@ -17,16 +17,35 @@ const App: React.FC = () => {
 
   const handleToggle = useCallback(
     (id: string) => {
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
+      setTasks((prevTasks) => {
+        const updatedTasks = prevTasks.map((task) =>
           task.id === id
             ? {
                 ...task,
                 status: task.status === TaskStatus.DONE ? TaskStatus.IN_PROGRESS : TaskStatus.DONE,
               }
             : task
-        )
-      );
+        );
+
+        const updatedTasksWithDependencies = updatedTasks.map((task) => {
+          const noOfDependencies = updatedTasks.filter((t) => t.parentId === task.id).length;
+          const noOfDoneDependencies = updatedTasks.filter(
+            (t) => t.parentId === task.id && t.status === TaskStatus.DONE
+          ).length;
+          const noOfCompleteDependencies = updatedTasks.filter(
+            (t) => t.parentId === task.id && t.status === TaskStatus.COMPLETE
+          ).length;
+
+          return {
+            ...task,
+            noOfDependencies,
+            noOfDoneDependencies,
+            noOfCompleteDependencies,
+          };
+        });
+
+        return updatedTasksWithDependencies;
+      });
     },
     [setTasks]
   );
@@ -49,6 +68,9 @@ const App: React.FC = () => {
         description: newTaskDescription || '',
         status: TaskStatus.IN_PROGRESS,
         parentId: parentTaskId || '',
+        noOfDependencies: 0,
+        noOfDoneDependencies: 0,
+        noOfCompleteDependencies: 0,
       };
 
       if (hasCircularDependency(newTaskObj.id, parentTaskId, tasks)) {

@@ -1,18 +1,22 @@
-# 🚀 Task Manager (v1.2.1)
+# 🚀 Task Manager (v1.3.0)
 
 A simple and responsive **Task Manager** built with **React**, **TypeScript**, and **Material-UI (MUI)**.
 
-![Task Manager Preview](./public/task-manager-preview-3.png)
+![Task Manager Preview](./public/task-manager-preview-4.png)
 
 ---
 
-## 📌 Features (v1.2.1)
+## 📌 Features (v1.3.0)
 
-✅ Add **Circular Dependency Check** in the **Task List**
+✅ Add **No of Dependency**, **No of DONE Dependency** and **No of COMPLETE Dependency**
 
 ---
 
 ## 📜 Version History
+
+### 🔹 v1.2.1
+
+- Add **Circular Dependency Check** in the **Task List**
 
 ### 🔹 v1.2.0
 

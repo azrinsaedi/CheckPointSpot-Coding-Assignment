@@ -1,12 +1,12 @@
 import { createContext } from 'react';
-import { Task } from '../types';
+import { TaskType } from '../types';
 
 interface TaskContextType {
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  tasks: TaskType[];
+  setTasks: React.Dispatch<React.SetStateAction<TaskType[]>>;
   filter: string;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  filteredTasks: Task[];
+  filteredTasks: TaskType[];
   newTaskName: string;
   setNewTaskName: React.Dispatch<React.SetStateAction<string>>;
   newTaskDescription: string;
