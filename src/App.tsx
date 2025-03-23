@@ -39,14 +39,15 @@ const App: React.FC = () => {
   };
 
   const handleAddTask = useCallback(
-    (newTaskName: string, newTaskDescription: string) => {
-      if (newTaskName.trim() === '' || newTaskDescription.trim() === '') return;
+    (newTaskName: string, newTaskDescription: string = '', parentTaskId: string = '') => {
+      if (newTaskName.trim() === '') return;
 
       const newTaskObj = {
         id: nanoid(8),
         name: newTaskName,
-        description: newTaskDescription,
+        description: newTaskDescription || '',
         status: TaskStatus.IN_PROGRESS,
+        parentId: parentTaskId || '',
       };
 
       setTasks((prevTasks) => [...prevTasks, newTaskObj]);

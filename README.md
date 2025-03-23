@@ -1,18 +1,24 @@
-# 🚀 Task Manager (v1.1.0)
+# 🚀 Task Manager (v1.2.0)
 
 A simple and responsive **Task Manager** built with **React**, **TypeScript**, and **Material-UI (MUI)**.
 
-![Task Manager Preview](./public/task-manager-preview-2.png)
+![Task Manager Preview](./public/task-manager-preview-3.png)
 
 ---
 
-## 📌 Features (v1.1.0)
+## 📌 Features (v1.2.0)
 
-✅ **Add Filter Dropdown**
+✅ Add **Parent ID** in the **Task List**
+✅ Minor **UI** Improvement
 
 ---
 
 ## 📜 Version History
+
+### 🔹 v1.2.0
+
+- Add **Parent ID** in the **Task List**
+- Minor **UI** Improvement
 
 ### 🔹 v1.1.0
 

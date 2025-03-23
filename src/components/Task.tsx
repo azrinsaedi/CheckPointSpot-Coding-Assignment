@@ -16,7 +16,7 @@ import TaskList from './TaskList';
 import { useTaskContext } from '../context/useTaskContext';
 
 const Task: React.FC<{
-  handleAddTask: (newTaskName: string, newTaskDescription: string) => void;
+  handleAddTask: (newTaskName: string, newTaskDescription?: string, parentTaskId?: string) => void;
   handleToggle: (id: string) => void;
 }> = ({ handleAddTask, handleToggle }) => {
   const {
@@ -30,6 +30,25 @@ const Task: React.FC<{
     setNewTaskDescription,
   } = useTaskContext();
 
+  const [parentTaskId, setParentTaskId] = React.useState<string>('');
+  const [error, setError] = React.useState<boolean>(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!newTaskName.trim()) {
+      setError(true);
+      return;
+    }
+
+    handleAddTask(newTaskName, newTaskDescription?.trim() || '', parentTaskId.trim() || '');
+
+    setNewTaskName('');
+    setNewTaskDescription('');
+    setParentTaskId('');
+    setError(false);
+  };
+
   return (
     <Container maxWidth='md' sx={{ mt: 4 }}>
       <Paper elevation={3} sx={{ p: 3 }}>
@@ -37,13 +56,19 @@ const Task: React.FC<{
           Add New Task
         </Typography>
 
-        <Box display='flex' flexDirection='column' gap={2} mb={2}>
+        <Box component='form' onSubmit={handleSubmit} display='flex' flexDirection='column' gap={2} mb={2}>
           <TextField
             label='Task Name'
             variant='outlined'
             fullWidth
+            required
             value={newTaskName}
-            onChange={(e) => setNewTaskName(e.target.value)}
+            onChange={(e) => {
+              setNewTaskName(e.target.value);
+              setError(false);
+            }}
+            error={error}
+            helperText={error ? 'Task name is required' : ''}
           />
           <TextField
             label='Task Description'
@@ -51,20 +76,21 @@ const Task: React.FC<{
             fullWidth
             multiline
             rows={2}
-            value={newTaskDescription}
+            value={newTaskDescription || ''}
             onChange={(e) => setNewTaskDescription(e.target.value)}
           />
+          <TextField
+            label='Parent Task ID'
+            variant='outlined'
+            fullWidth
+            value={parentTaskId}
+            onChange={(e) => setParentTaskId(e.target.value)}
+          />
+          <Typography display='flex' justifyContent='flex-end'>
+            * is required
+          </Typography>
           <Box display='flex' justifyContent='center'>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={() => {
-                handleAddTask(newTaskName, newTaskDescription);
-                setNewTaskName('');
-                setNewTaskDescription('');
-              }}
-              sx={{ width: '150px' }}
-            >
+            <Button type='submit' variant='contained' color='primary' sx={{ width: '150px' }}>
               Add Task
             </Button>
           </Box>

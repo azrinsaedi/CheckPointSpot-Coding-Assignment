@@ -9,6 +9,7 @@ export type Task = {
   name: string;
   description: string;
   status: TaskStatus;
+  parentId: string;
 };
 
 export type TaskListProps = {
